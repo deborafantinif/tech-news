@@ -1,6 +1,7 @@
 import time
-from parsel import Selector
+
 import requests
+from parsel import Selector
 
 
 # Requisito 1
@@ -30,7 +31,9 @@ def scrape_novidades(html_content):
 
 # Requisito 3
 def scrape_next_page_link(html_content):
-    """Seu código deve vir aqui"""
+    next_page = Selector(html_content).css("a.next::attr(href)").get()
+
+    return next_page
 
 
 # Requisito 4
