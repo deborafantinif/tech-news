@@ -40,7 +40,12 @@ def search_by_date(date):
 
 # Requisito 8
 def search_by_tag(tag):
-    """Seu código deve vir aqui"""
+    news = []
+    rgx = re.compile(f".*{tag}.*", re.IGNORECASE)
+    news_found = search_news({"tags": {"$regex": rgx}})
+    for new in news_found:
+        news.append((new["title"], new["url"]))
+    return news
 
 
 # Requisito 9
