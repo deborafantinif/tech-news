@@ -4,14 +4,18 @@ import re
 from tech_news.database import search_news
 
 
-# Requisito 6
-def search_by_title(title):
+def handle_search(value, column):
     news = []
-    rgx = re.compile(f".*{title}.*", re.IGNORECASE)
-    news_found = search_news({"title": {"$regex": rgx}})
+    rgx = re.compile(f".*{value}.*", re.IGNORECASE)
+    news_found = search_news({column: {"$regex": rgx}})
     for new in news_found:
         news.append((new["title"], new["url"]))
     return news
+
+
+# Requisito 6
+def search_by_title(title):
+    return handle_search(title, "title")
 
 
 # Requisito 7
@@ -40,14 +44,9 @@ def search_by_date(date):
 
 # Requisito 8
 def search_by_tag(tag):
-    news = []
-    rgx = re.compile(f".*{tag}.*", re.IGNORECASE)
-    news_found = search_news({"tags": {"$regex": rgx}})
-    for new in news_found:
-        news.append((new["title"], new["url"]))
-    return news
+    return handle_search(tag, "tags")
 
 
 # Requisito 9
 def search_by_category(category):
-    """Seu código deve vir aqui"""
+    return handle_search(category, "category")
