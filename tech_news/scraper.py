@@ -43,7 +43,7 @@ def scrape_noticia(html_content):
         .css("head link[rel='canonical']::attr(href)")
         .get()
     )
-    title = Selector(html_content).css("h1.entry-title::text").get()
+    title = Selector(html_content).css("h1.entry-title::text").get().strip()
     timestamp = Selector(html_content).css("li.meta-date::text").get()
     writer = Selector(html_content).css("span.author a::text").get()
     comments_count_string = (
@@ -55,7 +55,11 @@ def scrape_noticia(html_content):
         ][0]
     else:
         comments_count = 0
-    summary = Selector(html_content).css("div.entry-content p::text").get()
+    summary = "".join(
+        Selector(html_content)
+        .css("div.entry-content > p:nth-of-type(1) *::text")
+        .getall()
+    ).strip()
     find_tags = (
         Selector(html_content).css("section.post-tags a::text").getall()
     )
@@ -70,7 +74,7 @@ def scrape_noticia(html_content):
         "timestamp": timestamp,
         "writer": writer,
         "comments_count": comments_count,
-        "summary": summary.strip(),
+        "summary": summary,
         "tags": tags,
         "category": category,
     }
